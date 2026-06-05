@@ -45,7 +45,12 @@ Results should be ordered from most to least relevant (lowest to highest distanc
 *Describe how you will use `_collection.query()` to find relevant chunks. What arguments will you pass, and why?*
 
 ```
-[your answer here]
+1. query
+2. grab the results
+3. loop inside the results
+4. break down the provided result into a new dataset 
+5. return the new dataset
+
 ```
 
 ---
@@ -65,7 +70,8 @@ Results should be ordered from most to least relevant (lowest to highest distanc
 *`_collection.query()` returns nested lists. Describe what index you need to access to get the actual list of results for a single query, and why the nesting exists.*
 
 ```
-[your answer here]
+In some list, I needed to do list[0] to access the list of results.
+Some were simpler as I can just grab the index (list[index])
 ```
 
 ---
@@ -75,7 +81,8 @@ Results should be ordered from most to least relevant (lowest to highest distanc
 *Will you filter out results above a certain distance score, or return all `n_results` regardless of how relevant they are? What are the tradeoffs of each approach?*
 
 ```
-[your answer here]
+Returning all inside the n-results length can provide more answers to pick from,
+but this likely means less accuracy.
 ```
 
 ---
@@ -85,7 +92,7 @@ Results should be ordered from most to least relevant (lowest to highest distanc
 *How does your implementation behave when: (a) the collection is empty, (b) the query matches no chunks well, (c) the query matches chunks from multiple games?*
 
 ```
-[your answer here]
+If a value was empty, I would just skip. If things matched, I just used index instead of manually calling if that's you're referring to.
 ```
 
 ---
@@ -97,14 +104,14 @@ Results should be ordered from most to least relevant (lowest to highest distanc
 **Test query and top result returned:**
 
 ```
-Query: [your test query]
-Top result game: [game name]
-Distance score: [score]
-Does it make sense? [yes / no / explain]
+Query: "I love to program, why is that?"
+Top result game: Codenames
+Distance score: 0.834
+Does it make sense? Yes, my questions likely wasnt revelant though
 ```
 
 **One thing about the query results that surprised you:**
 
 ```
-[your answer here]
+Amount of results returned and the format it returns.
 ```

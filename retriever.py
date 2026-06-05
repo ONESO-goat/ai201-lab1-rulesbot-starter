@@ -123,4 +123,6 @@ def retrieve(query, n_results=N_RESULTS):
     return []
 
 if __name__ in "__main__":
-    retrieve(query="I like to program, why is that?")
+    chunks = retrieve(query="I like to program, why is that?")
+    for chunk in chunks:
+        print(f"[{chunk['game']}] (dist: {chunk['distance']:.3f}) {chunk['text'][:80]}...")
