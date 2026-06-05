@@ -1,4 +1,5 @@
 import chromadb
+import traceback
 from chromadb.utils import embedding_functions
 from config import CHROMA_COLLECTION, CHROMA_PATH, EMBEDDING_MODEL, N_RESULTS
 
@@ -46,6 +47,20 @@ def embed_and_store(chunks):
     print(f"Stored {_collection.count()} total chunks in the vector database.")
 
 
+def readable(results):
+    ids = results['ids'][0]
+    docs = results['documents'][0]
+    metadatas = results['metadatas'][0]
+    distances = results['distances'][0]
+
+    # Print out a cleanly formatted view
+    for idx, (doc_id, doc_text, meta, dist) in enumerate(zip(ids, docs, metadatas, distances), 1):
+        print(f"--- MATCH #{idx} ---")
+        print(f"ID: {doc_id}")
+        print(f"Game: {meta.get('game', 'Unknown')}")
+        print(f"Distance Score: {dist:.4f}")
+        print(f"Text:\n{doc_text.strip()}\n")
+        
 def retrieve(query, n_results=N_RESULTS):
     """
     Find the most relevant rule chunks for a user's question.
@@ -69,4 +84,43 @@ def retrieve(query, n_results=N_RESULTS):
         return []
 
     # Your implementation here.
+    try:
+        test = _collection.query(query_texts=[query], n_results=n_results)
+        print(f"INFORMATION: {readable(test)} - {type(test)}")
+        print(f"{test['ids']}")
+        #assert test.get("game", None) is not None
+        l = []
+        for i in range(n_results):
+            format = {
+                "id": '',
+                "text": '',
+                "game": '',
+                'distance': 0.0
+            }
+            for key, value in test.items():
+                print(f"KEY:\n\t\u2022 {key} - \nVALUE:\n\t\u2022 {value}")
+                if not value:
+                    continue
+                if key == 'ids':
+                    format['id'] = value[0][i]
+                    
+                if key == 'document':
+                    format['text'] = value[i]
+                if key == 'metadatas':
+                     
+                    format['game'] = value[0][i]['game']
+                    
+                if key == 'distances':
+                    format['distance'] = value[0][i]
+                l.append(format)
+                
+        print(f"\nFORMAT: \n\t\u2022{l}")
+        
+        return l
+    except Exception as ex:
+        print(f"\nError during retriving process: \n\t\u2022{ex}")
+        traceback.print_exc()
     return []
+
+if __name__ in "__main__":
+    retrieve(query="I like to program, why is that?")

@@ -51,20 +51,21 @@ def chunk_document(text, game_name):
     counter = 0
 
     start = 0
-    while start < len(text):
-        end = start + chunk_size
-        chunk_text = text[start:end].strip()
+    while start < len(text): # start loop
+        end = start + chunk_size # define end of chunk
+        chunk_text = text[start:end].strip() # start to end, trim whitespace
 
         if len(chunk_text) >= min_length:
+            # if the length of the chunk is long enough, add it to the list with metadata
             chunks.append({
                 "text": chunk_text,
                 "game": game_name,
                 "chunk_id": f"{prefix}_{counter}",
             })
-            counter += 1
+            counter += 1 # increase counter for unique chunk_id
 
         # Advance by (chunk_size - overlap) so the next chunk shares
         # `overlap` characters with the tail of this one.
-        start += chunk_size - overlap
+        start += chunk_size - overlap # move the start point forward by chunk_size minus the overlap to create the next chunk
 
     return chunks
